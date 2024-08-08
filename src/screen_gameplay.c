@@ -24,13 +24,22 @@
 **********************************************************************************************/
 
 #include "raylib.h"
+#include "raymath.h"
 #include "screens.h"
+
+#define PLAYER_WIDTH 20.0f
+#define PLAYER_HEIGHT 40.0f
+
+typedef struct Player {
+    Vector2 position;
+    int rotation;
+} Player;
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-static int framesCounter = 0;
-static int finishScreen = 0;
+Vector2 playerPosition;
+Texture2D backgroundTexture;
 
 //----------------------------------------------------------------------------------
 // Gameplay Screen Functions Definition
@@ -39,32 +48,30 @@ static int finishScreen = 0;
 // Gameplay Screen Initialization logic
 void InitGameplayScreen(void)
 {
-    // TODO: Initialize GAMEPLAY screen variables here!
-    framesCounter = 0;
-    finishScreen = 0;
+    playerPosition.x = 180.0f;
+    playerPosition.y = 130.0f;
+
+    Image img = GenImageChecked(64, 64, 32, 32, DARKBROWN, DARKGRAY);
+    backgroundTexture = LoadTextureFromImage(img);
+    UnloadImage(img);
 }
 
 // Gameplay Screen Update logic
 void UpdateGameplayScreen(void)
 {
-    // TODO: Update GAMEPLAY screen variables here!
-
-    // Press enter or tap to change to ENDING screen
-    if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
-    {
-        finishScreen = 1;
-        PlaySound(fxCoin);
-    }
+    if (IsKeyDown(KEY_RIGHT)) playerPosition.x += 5;
+    if (IsKeyDown(KEY_LEFT)) playerPosition.x -= 5;
+    if (IsKeyDown(KEY_UP)) playerPosition.y -= 5;
+    if (IsKeyDown(KEY_DOWN)) playerPosition.y += 5;
 }
 
 // Gameplay Screen Draw logic
 void DrawGameplayScreen(void)
 {
-    // TODO: Draw GAMEPLAY screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), PURPLE);
-    Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "GAMEPLAY SCREEN", pos, font.baseSize*3.0f, 4, MAROON);
-    DrawText("PRESS ENTER or TAP to JUMP to ENDING SCREEN", 130, 220, 20, MAROON);
+    // Draw the tile background
+    DrawTextureRec(backgroundTexture, (Rectangle){ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() }, Vector2Zero(), WHITE);
+    DrawEllipse(playerPosition.x, playerPosition.y, PLAYER_WIDTH, PLAYER_HEIGHT, LIME);
+    DrawCircle(playerPosition.x + PLAYER_WIDTH / 2.0, playerPosition.y, 10.0f, RED);
 }
 
 // Gameplay Screen Unload logic
@@ -76,5 +83,5 @@ void UnloadGameplayScreen(void)
 // Gameplay Screen should finish?
 int FinishGameplayScreen(void)
 {
-    return finishScreen;
+    return -1;
 }
