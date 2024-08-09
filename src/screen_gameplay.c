@@ -65,7 +65,7 @@ void DrawGameplayScreen(void)
 // Gameplay Screen Unload logic
 void UnloadGameplayScreen(void)
 {
-    // TODO: Unload GAMEPLAY screen variables here!
+    UnloadPlayer(&player);
 }
 
 // Gameplay Screen should finish?
