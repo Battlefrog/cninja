@@ -25,20 +25,13 @@
 
 #include "raylib.h"
 #include "raymath.h"
+#include "player.h"
 #include "screens.h"
-
-#define PLAYER_WIDTH 20.0f
-#define PLAYER_HEIGHT 40.0f
-
-typedef struct Player {
-    Vector2 position;
-    int rotation;
-} Player;
 
 //----------------------------------------------------------------------------------
 // Module Variables Definition (local)
 //----------------------------------------------------------------------------------
-Vector2 playerPosition;
+Player player;
 Texture2D backgroundTexture;
 
 //----------------------------------------------------------------------------------
@@ -48,10 +41,9 @@ Texture2D backgroundTexture;
 // Gameplay Screen Initialization logic
 void InitGameplayScreen(void)
 {
-    playerPosition.x = 180.0f;
-    playerPosition.y = 130.0f;
+    InitPlayer(&player);
 
-    Image img = GenImageChecked(64, 64, 32, 32, DARKBROWN, DARKGRAY);
+    Image img = GenImageChecked(64, 64, 32, 32, BROWN, RAYWHITE);
     backgroundTexture = LoadTextureFromImage(img);
     UnloadImage(img);
 }
@@ -59,10 +51,7 @@ void InitGameplayScreen(void)
 // Gameplay Screen Update logic
 void UpdateGameplayScreen(void)
 {
-    if (IsKeyDown(KEY_RIGHT)) playerPosition.x += 5;
-    if (IsKeyDown(KEY_LEFT)) playerPosition.x -= 5;
-    if (IsKeyDown(KEY_UP)) playerPosition.y -= 5;
-    if (IsKeyDown(KEY_DOWN)) playerPosition.y += 5;
+    UpdatePlayer(&player);
 }
 
 // Gameplay Screen Draw logic
@@ -70,8 +59,7 @@ void DrawGameplayScreen(void)
 {
     // Draw the tile background
     DrawTextureRec(backgroundTexture, (Rectangle){ 0, 0, (float)GetScreenWidth(), (float)GetScreenHeight() }, Vector2Zero(), WHITE);
-    DrawEllipse(playerPosition.x, playerPosition.y, PLAYER_WIDTH, PLAYER_HEIGHT, LIME);
-    DrawCircle(playerPosition.x + PLAYER_WIDTH / 2.0, playerPosition.y, 10.0f, RED);
+    DrawPlayer(&player);
 }
 
 // Gameplay Screen Unload logic
