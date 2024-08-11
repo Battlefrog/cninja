@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #define SCALE 4.0
+#define MOVE_SPEED 5.0
 
 typedef struct Player {
     //Animation anim;
@@ -33,22 +34,40 @@ void InitPlayer(Player *player)
 
     player->sourceRec = (Rectangle){0.0f, 0.0f, (float)player->frameWidth, (float)player->frameHeight};
     player->destRec = (Rectangle){player->position.x, player->position.y, (float)player->frameWidth*SCALE, (float)player->frameHeight*SCALE};
-    //player->origin = Vector2Zero();
     player->origin = (Vector2){40.0f, 56.0f};
 }
 
 void UpdatePlayer(Player *player) 
 {
-    if (IsKeyDown(KEY_D)) player->position.x += 5;
-    if (IsKeyDown(KEY_A)) player->position.x -= 5;
-    if (IsKeyDown(KEY_W)) player->position.y -= 5;
-    if (IsKeyDown(KEY_S)) player->position.y += 5;
-
-    player->destRec = (Rectangle){player->position.x, player->position.y, (float)player->frameWidth*SCALE, (float)player->frameHeight*SCALE};
-    
+    // Player Mouse Rotation
     float x = GetMouseX() - player->position.x;
     float y = GetMouseY() - player->position.y;
     player->rotation = (float)atan2(x, y) * -57.29578f; // https://stackoverflow.com/questions/74402587/point-texture-image-in-the-direction-of-the-cursor-in-raylib-c
+
+    Vector2 rotationVector = {x, y};
+    Vector2 movementVector = Vector2Normalize(Vector2MoveTowards(player->position, rotationVector, 1000.0f));
+    movementVector = Vector2Scale(movementVector, MOVE_SPEED);
+
+    printf("(%f, %f)\n", movementVector.x, movementVector.y);
+    
+    if (IsKeyDown(KEY_W))
+    {
+        player->position = Vector2Add(player->position, movementVector);
+    }
+    else if (IsKeyDown(KEY_S))
+    {
+        player->position = Vector2Subtract(player->position, movementVector);
+    }
+    else if (IsKeyDown(KEY_A))
+    {
+        player->position = Vector2Add(player->position, Vector2Reflect(movementVector, (Vector2){0.0f, -1.0f}));
+    }
+    else if (IsKeyDown(KEY_D))
+    {
+        player->position = Vector2Subtract(player->position, Vector2Reflect(movementVector, (Vector2){0.0f, 1.0f}));
+    }
+
+    player->destRec = (Rectangle){player->position.x, player->position.y, (float)player->frameWidth*SCALE, (float)player->frameHeight*SCALE};
 }
 
 void DrawPlayer(Player *player)
