@@ -59,7 +59,8 @@ int main(void)
 {
     // Initialization
     //---------------------------------------------------------
-    InitWindow(screenWidth, screenHeight, "raylib game template");
+    InitWindow(screenWidth, screenHeight, "cninja");
+    SetWindowFocused();
 
     InitAudioDevice();      // Initialize audio device
 
@@ -286,7 +287,7 @@ static void UpdateDrawFrame(void)
         // Draw full screen rectangle in front of everything
         if (onTransition) DrawTransition();
 
-        //DrawFPS(10, 10);
+        DrawFPS(10, 10);
 
     EndDrawing();
     //----------------------------------------------------------------------------------

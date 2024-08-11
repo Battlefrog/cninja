@@ -52,9 +52,8 @@ void UpdateTitleScreen(void)
     // Press enter or tap to change to GAMEPLAY screen
     if (IsKeyPressed(KEY_ENTER) || IsGestureDetected(GESTURE_TAP))
     {
-        //finishScreen = 1;   // OPTIONS
         finishScreen = 2;   // GAMEPLAY
-        PlaySound(fxCoin);
+        //PlaySound(fxCoin);
     }
 }
 
@@ -62,10 +61,10 @@ void UpdateTitleScreen(void)
 void DrawTitleScreen(void)
 {
     // TODO: Draw TITLE screen here!
-    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GREEN);
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), GRAY);
     Vector2 pos = { 20, 10 };
-    DrawTextEx(font, "TITLE SCREEN", pos, font.baseSize*3.0f, 4, DARKGREEN);
-    DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, DARKGREEN);
+    DrawTextEx(font, "cninja", pos, font.baseSize*3.0f, 4, WHITE);
+    DrawText("PRESS ENTER or TAP to JUMP to GAMEPLAY SCREEN", 120, 220, 20, WHITE);
 }
 
 // Title Screen Unload logic

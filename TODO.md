@@ -1,7 +1,7 @@
 # TODO
 
 ## Hotline Miami-like prototype
-- Player look at mouse, movement ala Hotline Miami
+- Player movement towards look direction
 - Camera with Shift-look
 - Objects, collision detection
 - Weapons, equipping
